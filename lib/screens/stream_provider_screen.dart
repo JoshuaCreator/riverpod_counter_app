@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final counterStream = StreamProvider<int>((ref) => Stream.periodic(
-      const Duration(seconds: 1),
-      (count) => count,
-    ));
+final counterStream = StreamProvider<int>(
+  (ref) => Stream.periodic(
+    const Duration(microseconds: 1),
+    (count) => count,
+  ),
+);
 
-class SecondScreen extends StatelessWidget {
-  const SecondScreen({super.key});
+class StreamProviderScreen extends ConsumerWidget {
+  const StreamProviderScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SECOND SCREEN'),
+        title: const Text('STREAM PROVIDER'),
         centerTitle: true,
       ),
       body: Center(
@@ -28,6 +30,9 @@ class SecondScreen extends StatelessWidget {
           },
         ),
       ),
+      // persistentFooterButtons: [
+      //   Text("The stream provider is used to read the state of a stream object")
+      // ],
     );
   }
 }

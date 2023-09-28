@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_app/screens/provider_screen.dart';
+import 'package:riverpod_app/screens/scoped_provider_screen.dart';
+import 'package:riverpod_app/screens/state_provider_screen.dart';
+import 'package:riverpod_app/screens/future_provider_screen.dart';
+import 'package:riverpod_app/screens/stream_provider_screen.dart';
 
 import '../main.dart';
-import 'second_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider);
     final lightTheme = ref.watch(themeProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('R I V E R P O D  A P P'),
+        title: const Text('Riverpod Providers'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -26,42 +29,63 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('$counter'),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 30.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton(
-              heroTag: null,
-              onPressed: () {
-                // if (value == 0) return;
-                ref.read(counterProvider.notifier).decrement();
-              },
-              child: const Icon(Icons.remove_rounded),
+            MyButton(
+              text: 'Provider',
+              screen: ProviderScreen(),
             ),
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    maintainState: false,
-                    builder: (context) => const SecondScreen(),
-                  ),
-                );
-              },
-              child: const Icon(Icons.navigate_next_rounded),
+            MyButton(
+              text: 'State Provider',
+              screen: StateProviderScreen(),
             ),
-            FloatingActionButton(
-              heroTag: null,
-              onPressed: () {
-                ref.read(counterProvider.notifier).increment();
-              },
-              child: const Icon(Icons.add_rounded),
+            MyButton(
+              text: 'Future Provider',
+              screen: FutureProviderScreen(),
+            ),
+            MyButton(
+              text: 'Stream Provider',
+              screen: StreamProviderScreen(),
+            ),
+            MyButton(
+              text: 'Scoped Provider',
+              screen: ScopedProviderScreen(),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MyButton extends StatelessWidget {
+  const MyButton({
+    super.key,
+    required this.text,
+    required this.screen,
+  });
+  final String text;
+  final Widget screen;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: Colors.purpleAccent.withOpacity(.5),
+      highlightColor: Colors.purpleAccent.withOpacity(.5),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => screen,
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        width: double.infinity,
+        child: Center(child: Text(text)),
       ),
     );
   }
